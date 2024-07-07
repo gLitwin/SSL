@@ -1,4 +1,4 @@
-#ifdef TABLA_H_INCLUDED
+#ifndef TABLA_H_INCLUDED
 #define TABLA_H_INCLUDED
 
 void tabla(float nudos[]);

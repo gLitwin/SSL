@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tabla.h"
-#include "conversion.h"
+//#include "conversion.h"
 
 int main(int argc, char* argv[])
 {
@@ -12,13 +12,16 @@ int main(int argc, char* argv[])
     if(argc == 4){
         Incremento = strtol(argv[3], NULL, 10);
     }
+    printf("%f - %f - %f\n",inicio, fin, Incremento);
     float aux = inicio + Incremento;
     int i = 2;
+    printf("%f\n", aux);
     while (aux < fin)
     {
         aux += Incremento;
         i++;
     }
+    printf("%f\n", aux);
     float nudos[i];
     aux = inicio;
     int j = 0;
