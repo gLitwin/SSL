@@ -20,17 +20,23 @@ int main(int argc, char* argv[])
     {
         aux += Incremento;
         i++;
+        //printf("%d", i);
     }
     printf("%f\n", aux);
     float nudos[i];
+    printf("%d\n",i);
     aux = inicio;
     int j = 0;
-    for (j; j < i; i++)
+    printf("%f\n", aux);
+    while (j < i)
     {
+        printf("entro al while\n");
         nudos[j] = aux;
+        printf("%f\n",nudos[j]);
         aux += Incremento;
+        j++;
     }
-    nudos[j+1] = '\0';
-    tabla(nudos);
+    printf("salio del while\n");
+    tabla(j,nudos);
     return 0;
 }

@@ -2,15 +2,9 @@
 #include "conversion.h"
 #include "tabla.h"
 
-void tabla(float nudos[]){
-    int i = nudos[0];
-    int j = 1;
-    while(!(i='\0')){
-        i = nudos[j];
-        j++;
-    }
+void tabla(int filas, float nudos[]){
     printf("|\tNudos |\tKm/h |");
-    for(int i = 0;i<j; i++){
+    for(int i = 0;i<filas; i++){
         printf("|\t%f |\t%f |", nudos[i], conversion(nudos[i]));
     }
     return;
