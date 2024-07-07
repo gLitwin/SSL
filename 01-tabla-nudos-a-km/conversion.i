@@ -7,6 +7,6 @@
 # 1 "conversion.h" 1
 # 2 "conversion.c" 2
 
-double conversion(double nudos){
+float conversion(float nudos){
     return nudos*1.852;
 }

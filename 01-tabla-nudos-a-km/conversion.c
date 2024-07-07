@@ -1,5 +1,5 @@
 #include "conversion.h"
 
-double conversion(double nudos){
+float conversion(float nudos){
     return nudos*1.852;
 }

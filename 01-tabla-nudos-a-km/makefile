@@ -1,5 +1,5 @@
-app: main.o tabla.o conversion.o
-	gcc -o app main.o tabla.o conversion.o
+app.out: main.o tabla.o conversion.o
+	gcc -o app.out main.o tabla.o conversion.o
 
 main.o: main.c
 	gcc -c main.c

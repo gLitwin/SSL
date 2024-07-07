@@ -2,7 +2,7 @@
 #include "conversion.h"
 #include "tabla.h"
 
-void tabla(double nudos[]){
+void tabla(float nudos[]){
     int i = nudos[0];
     int j = 1;
     while(!(i='\0')){
