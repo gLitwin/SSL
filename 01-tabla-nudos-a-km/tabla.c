@@ -5,7 +5,7 @@
 void tabla(int filas, float nudos[]){
     printf("|\tNudos |\tKm/h |");
     for(int i = 0;i<filas; i++){
-        printf("|\t%f |\t%f |", nudos[i], conversion(nudos[i]));
+        printf("\n|\t%.3f |\t%.3f |", nudos[i], conversion(nudos[i]));
     }
     return;
 }

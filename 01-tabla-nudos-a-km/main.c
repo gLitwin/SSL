@@ -12,27 +12,27 @@ int main(int argc, char* argv[])
     if(argc == 4){
         Incremento = strtol(argv[3], NULL, 10);
     }
-    printf("%f - %f - %f\n",inicio, fin, Incremento);
+    printf("%.3f - %.3f - %.3f\n",inicio, fin, Incremento);
     float aux = inicio + Incremento;
-    int i = 2;
-    printf("%f\n", aux);
+    int i = 1;
+    printf("%.3f\n", aux);
     while (aux < fin)
     {
         aux += Incremento;
         i++;
         //printf("%d", i);
     }
-    printf("%f\n", aux);
+    printf("%.3f\n", aux);
     float nudos[i];
     printf("%d\n",i);
     aux = inicio;
     int j = 0;
-    printf("%f\n", aux);
+    printf("%.3f\n", aux);
     while (j < i)
     {
         printf("entro al while\n");
         nudos[j] = aux;
-        printf("%f\n",nudos[j]);
+        printf("%.3f\n",nudos[j]);
         aux += Incremento;
         j++;
     }
