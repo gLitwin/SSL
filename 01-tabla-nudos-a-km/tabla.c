@@ -3,9 +3,9 @@
 #include "tabla.h"
 
 void tabla(int filas, float nudos[]){
-    printf("|\tNudos |\tKm/h |");
+    printf("| Nudos\t| Km/h\t\t|");
     for(int i = 0;i<filas; i++){
-        printf("\n|\t%.3f |\t%.3f |", nudos[i], conversion(nudos[i]));
+        printf("\n|    %-g\t|    %-g\t|", nudos[i], conversion(nudos[i]));
     }
     return;
 }
