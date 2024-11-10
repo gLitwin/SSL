@@ -215,6 +215,20 @@ int *palabras_reservadas = {
 static bool debo_escanear = true;
 static Token token_actual;
 
+Token reemplazarIdentificadorPorReservada(Token token){
+    if(!strcmp(token.lexema, "programa"))
+        token.tipo = PROGRAMA;
+    if(!strcmp(token.lexema, "fin"))
+        token.tipo = FIN;
+    if(!strcmp(token.lexema, "entero"))
+        token.tipo = ENTERO;
+    if(!strcmp(token.lexema, "leer"))
+        token.tipo = LEER;
+    if(!strcmp(token.lexema, "escribir"))
+        token.tipo = ESCRIBIR;
+    return token;
+}
+
 Token prox_token(void)
 {
 	if (debo_escanear) {
@@ -226,7 +240,7 @@ Token prox_token(void)
 		if (token_actual.tipo == IDENTIFICADOR) {            
 			int es_palabra_reservada = string_in_array(token_actual.lexema, palabras_reservadas, 5);
 			if(es_palabra_reservada) {
-				token_actual.tipo = PALABRA_RESERVADA; 
+				token_actual = reemplazarIdentificadorPorReservada(token_actual); 
             }
 		}
 	}
