@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "scanner.h"
+#include "parser.h"
 
 #define MAX_LINE_LENGTH 256
 #define MAX_KEY_LENGTH 128
@@ -13,6 +14,7 @@ typedef struct {
 } KeyValuePair;
 
 void parser() {
+    initTablaTransicion();  // Inicializar la tabla de transición
     Programa();
 }
 
@@ -60,7 +62,7 @@ void ErrorSintactico(){
 }
 
 void Programa(){ //?      AXIOMA
-    Token t = prox_token(); //! como deberia empezar?
+    Token t = prox_token();
     if(t.tipo != PROGRAMA){
         ErrorSintactico();
     }
