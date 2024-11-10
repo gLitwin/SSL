@@ -12,7 +12,11 @@ typedef struct {
     char value[MAX_VALUE_LENGTH];
 } KeyValuePair;
 
-void parseFile(const char *filename) { //! esto lo hizo chatgpt
+void parser() {
+    Programa();
+}
+
+/* void parseFile(const char *filename) { //! esto lo hizo chatgpt
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("Error opening file");
@@ -47,14 +51,29 @@ int main(int argc, char *argv[]) {
 
     parseFile(argv[1]);
     return EXIT_SUCCESS;
+} */
+
+void ErrorSintactico(){
+    Token t = prox_token();
+    printf("Error sintactico, no se esperaba el token: ");
+    printToken(t);
 }
 
 void Programa(){ //?      AXIOMA
-    Token t = prox_token(); //! como deberia empezar? 
+    Token t = prox_token(); //! como deberia empezar?
+    if(t.tipo != PROGRAMA){
+        ErrorSintactico();
+    }
+    printf("Programa: ");
     match(t);
     Identificador();
+    printf("%s\n", t.lexema);
     ListaSentencias();
     t = prox_token();
+    if(t.tipo != FIN){
+        ErrorSintactico();
+    }
+    printf("fin\n");
     match(t);
 }
 
@@ -75,12 +94,19 @@ void Sentencia(){
         }
         match(t);
         Expresion();
+        printf("sentencia asignacion\n");
     } else {
     switch (t.tipo) //TODO
     {
     case ENTERO:
         match(t);
         Identificador();
+        t = prox_token();
+        if(t.tipo != PUNTO_Y_COMA){
+            ErrorSintactico();
+        }
+        match(t);
+        printf("sentencia declaracion\n");
         break;
     case LEER:
         match(t);
@@ -95,6 +121,12 @@ void Sentencia(){
             ErrorSintactico();
         }
         match(t);
+        t = prox_token();
+        if(t.tipo != PUNTO_Y_COMA){
+            ErrorSintactico();
+        }
+        match(t);
+        printf("sentencia leer\n");
         break;
     case ESCRIBIR:
         match(t);
@@ -109,13 +141,22 @@ void Sentencia(){
             ErrorSintactico();
         }
         match(t);
+        t = prox_token();
+        if(t.tipo != PUNTO_Y_COMA){
+            ErrorSintactico();
+        }
+        match(t);
+        printf("sentencia declaracion\n");
     default:
-        ErrorSintactico(); //TODO 
+        ErrorSintactico();
         break;
     }
     }
-    Token puntoComa = {PUNTO_Y_COMA, ";" };
-    match(puntoComa); //!!!!!!!!!!!!!!
+/*     t = prox_token(); //TODO estaría bien dejar de repetir el ';', está hecho así por los printf
+    if(t.tipo != PUNTO_Y_COMA){
+        ErrorSintactico();
+    }
+    match(t); */
 }
 
 void listaIdentificadores(){
