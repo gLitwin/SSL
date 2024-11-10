@@ -20,7 +20,11 @@ typedef enum {
     ERROR_CONSTANTE = 20,
     ERROR_ASIGNACION_DOS_PUNTOS = 27,
     ERROR_ASIGNACION_IGUAL = 29,
-    PALABRA_RESERVADA = 50
+    PROGRAMA = 50,
+    FIN = 51,
+    ENTERO = 52,
+    ESCRIBIR = 53,
+    LEER = 54
 } TokenType;
 
 typedef struct {
