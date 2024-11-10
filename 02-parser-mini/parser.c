@@ -50,17 +50,17 @@ int main(int argc, char *argv[]) {
 }
 
 void Programa(){ //?      AXIOMA
-    Token programa = {PALABRA_RESERVADA, "programa" }; 
-    match(programa);
+    Token t = prox_token(); //! como deberia empezar? 
+    match(t);
     Identificador();
     ListaSentencias();
-    Token fin = {PALABRA_RESERVADA, "fin" }; 
-    match(fin);
+    t = prox_token();
+    match(t);
 }
 
 void ListaSentencias(){
     //TODO debe haber al menos una sentencia
-    for(Token t = prox_token(); strcmp(t.lexema, "fin-prog"); t = prox_token()){
+    for(Token t = prox_token(); t.tipo != FIN; t = prox_token()){
         Sentencia();
     }
 }
@@ -69,29 +69,46 @@ void Sentencia(){
     Token t = prox_token();
     if(t.tipo == IDENTIFICADOR){
         match(t);
-        Token tokenAsignacion = {ASIGNACION, ":="};
-        match(tokenAsignacion);
+        t = prox_token(t);
+        if(t.tipo != ASIGNACION){
+            ErrorSintactico();
+        }
+        match(t);
         Expresion();
     } else {
-    switch (t.lexema) //TODO
+    switch (t.tipo) //TODO
     {
-    case "entero":
+    case ENTERO:
         match(t);
         Identificador();
         break;
-    case "leer":
-        match("leer");
-        match("(");
+    case LEER:
+        match(t);
+        t = prox_token();
+        if(t.tipo != PARENTESIS_ABRE){
+            ErrorSintactico();
+        }
+        match(t);
         ListaIdentificadores();
-        Token parentesisCierra = { PARENTESIS_CIERRA, ")" };
-        match(parentesisCierra); //!!!!!!!!!!!!
+        t = prox_token();
+        if(t.tipo != PARENTESIS_CIERRA){
+            ErrorSintactico();
+        }
+        match(t);
         break;
-    case "escribir":
-        match("escribir");
-        match("(");
+    case ESCRIBIR:
+        match(t);
+        t = prox_token();
+        if(t.tipo != PARENTESIS_ABRE){
+            ErrorSintactico();
+        }
+        match(t);
         ListaExpresiones();
-        Token parentesisCierra = { PARENTESIS_CIERRA, ")" };
-        match(parentesisCierra); //!!!!!!!!!!!!!!
+        t = prox_token();
+        if(t.tipo != PARENTESIS_CIERRA){
+            ErrorSintactico();
+        }
+        match(t);
     default:
         ErrorSintactico(); //TODO 
         break;
@@ -102,8 +119,8 @@ void Sentencia(){
 }
 
 void listaIdentificadores(){
-    Token t = prox_token();
     Identificador();
+    Token t = prox_token();
     while(t.tipo == COMA){
         match(t);
         Identificador();
@@ -111,8 +128,8 @@ void listaIdentificadores(){
 }
 
 void listaExpresiones(){
-    Token t = prox_token();
     Expresion();
+    Token t = prox_token();
     while(t.tipo == COMA){
         match(t);
         Expresion();
@@ -120,8 +137,8 @@ void listaExpresiones(){
 }
 
 void Expresion(){
-    Token t = prox_token();
     Termino();
+    Token t = prox_token();
     while(t.tipo == OPERADOR_MAS || t.tipo == OPERADOR_MENOS){
         match(t);
         Termino();
@@ -141,28 +158,29 @@ void Primaria(){
     Token t = prox_token();
     switch(t.tipo){
         case IDENTIFICADOR:
-        Identificador();
+            Identificador();
         break;
         case CONSTANTE:
-        Constante();
+            Constante();
         break;
         case PARENTESIS_ABRE:
-        match(t);
-        Expresion();
-        Token parentesisCierra = { PARENTESIS_CIERRA, ")" };
-        match(parentesisCierra); //TODO COMO HACEMOS MATCH DE PARENTESISA QUE CIERRA
+            match(t);
+            Expresion();
+            t = prox_token();
+            if(t.tipo != PARENTESIS_CIERRA){
+                ErrorSintactico();
+            }
+            match(t);
         break;
         case OPERADOR_MENOS:
-        match(t);
-        Expresion();
+            match(t);
+            Expresion();
     }
 }
 void Constante(){
-    Token t = prox_token()
-    if(is_digit(t.lexema)){
-        Digito();
-        for(t = prox_token(); is_digit(t); t = prox_token)
-        Digito();
+    Token t = prox_token();
+    if(t.tipo == CONSTANTE){
+        match(t);
     } else {
         ErrorSintactico();
     }
@@ -171,129 +189,9 @@ void Constante(){
 
 void Identificador(){
     Token t = prox_token();
-    if(is_alpha(t)){
-        match(t);
-        while(1){
-            t = prox_token();
-            if(is_alpha(t) || is_digit(t)){
-                match(t);
-            } else {
-                break;
-            }
-        }
-    } else {
-        ErrorSintactico();
-    }
-}
-/* 
-void Digito() {
-    Token t = prox_token(); // Obtiene el siguiente token
-
-    // Verifica si el token es un dígito
-    if (t.lexema >= '0' && t.lexema <= '9') {
-        match(t); // Coincide con el dígito
-    } else {
-        ErrorSintactico(); // Maneja el error si no es un dígito
-    }
-}
-
-void PalabraReservada() {
-    Token t = prox_token(); // Obtiene el siguiente token
-
-    // Verifica si el token es un dígito
-    if (es_palabra_reservada(t)) {
-        match(t.lexema); // Coincide con el dígito
-    } else {
-        ErrorSintactico(); // Maneja el error si no es un dígito
-    }
-} */
-/* 
-void Letra() {
-    Token t = prox_token(); // Obtiene el siguiente token
-
-    // Verifica si el token es un dígito
-    if (is_alpha(t.lexema)) {
-        match(t.lexema); // Coincide con el dígito
-    } else {
-        ErrorSintactico(); // Maneja el error si no es un dígito
-    }
-} */
-/* 
-is_operador(char t){
-    return t == '+' || t == '-' || t == '*' || t == '/' || t == '%';
-} */
-/* 
-void Operador() {
-    Token t = prox_token(); 
-
-    if (is_operador(t.lexema)) {
-        match(t.lexema); 
-    } else {
-        ErrorSintactico(); 
-    }
-} */
-
-/* void Asignacion(){
-    Token t = prox_token();
-    if(t.tipo == ASIGNACION){
+    if(t.tipo == IDENTIFICADOR){
         match(t);
     } else {
         ErrorSintactico();
     }
-} */
-
-/* void CaracterPuntuacion(){
-    Token t = prox_token();
-    switch(t.tipo) {
-        case PARENTESIS_ABRE:
-            match(t);
-        break;
-        case PARENTESIS_CIERRA:
-            match(t);
-            break;
-        case  PUNTO_Y_COMA:
-            match(t);
-            break;
-        case COMA:
-            match(t);
-            break;    
-        default:
-            ErrorSintactico();
-    }
-    
-} */
-
-
-/* void Tokenfuncion(){ //AXIOMA, la llamamos TokenFunctino para que no colisione con el tipo Token
-    Token t = prox_token();
-    switch(t.tipo){
-        case IDENTIFICADOR:
-        Identificador();
-        break;
-        case CONSTANTE:
-        Constante();
-        break;
-        case PALABRA_RESERVADA:
-        PalabraReservada();
-        break;
-        case OPERADOR_DIVISION:
-        case OPERADOR_MAS:
-        case OPERADOR_MENOS:
-        case OPERADOR_MODULO:
-        case OPERADOR_MULTIPLICACION:
-        Operador();
-        break;
-        case ASIGNACION:
-        Asignacion();
-        break;
-        case PARENTESIS_ABRE:
-        case PARENTESIS_CIERRA:
-        case COMA:
-        case PUNTO_Y_COMA:
-        CaracterPuntuacion();
-        break;
-        default:
-            ErrorSintactico();
-    }
 }
- */
