@@ -254,7 +254,7 @@ bool son_tokens_iguales(Token token1, Token token2){
 
 void match(Token t)
 {
-	if (son_tokens_iguales(t, prox_token()))
+	if (!son_tokens_iguales(t, prox_token()))
 		error_sintactico(prox_token());
 	debo_escanear = true;
 }
