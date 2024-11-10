@@ -6,10 +6,7 @@ int main() {
 
     initTablaTransicion();  // Inicializar la tabla de transición
 
-    do {
-        token = getNextToken();  // Leer desde stdin
-        printToken(token);       // Escribir en stdout
-    } while (token.tipo != FDT);
-
+    parser();
+    
     return 0;
 }
