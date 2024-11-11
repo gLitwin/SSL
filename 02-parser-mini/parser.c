@@ -4,15 +4,6 @@
 #include "scanner.h"
 #include "parser.h"
 
-#define MAX_LINE_LENGTH 256
-#define MAX_KEY_LENGTH 128
-#define MAX_VALUE_LENGTH 128
-
-typedef struct {
-    char key[MAX_KEY_LENGTH];
-    char value[MAX_VALUE_LENGTH];
-} KeyValuePair;
-
 void parser() {
     initTablaTransicion();  // Inicializar la tabla de transición
     Programa(); //Comienza por el axioma a derivar
