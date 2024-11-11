@@ -58,7 +58,7 @@ void Sentencia(){
     break;
     default:
         ErrorSintactico();
-        break;
+    break;
     }
     }
     match(PUNTO_Y_COMA);
@@ -117,6 +117,10 @@ void Primaria(){
         case OPERADOR_MENOS:
             match(OPERADOR_MENOS);
             Expresion();
+        break;
+        default:
+            ErrorSintactico();
+        break;
     }
 }
 void Constante(){ //? Funciones evitables... pongo simplemente match(CONSTANTE)?
