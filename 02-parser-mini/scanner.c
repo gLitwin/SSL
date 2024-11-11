@@ -281,4 +281,5 @@ void match(TokenType t)
 	if (t != prox_token().tipo)
 		ErrorSintactico(prox_token());
 	debo_escanear = true;
+    prox_token(); //esta invocación es para que no haya necesidad de llamar prox_token() entre llamados de match()
 }

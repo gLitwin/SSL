@@ -16,7 +16,6 @@ void Programa(){ //AXIOMA
     Identificador();
     printf("%s\n", t.lexema);
     ListaSentencias();
-    t = prox_token();
     printf("fin\n");
     match(FIN);
 }
@@ -33,7 +32,6 @@ void Sentencia(){
     if(t.tipo == IDENTIFICADOR){
         printf("sentencia asignacion\n");
         match(IDENTIFICADOR);
-        t = prox_token(t);
         match(ASIGNACION);
         Expresion();
     } else {
@@ -47,10 +45,8 @@ void Sentencia(){
     case LEER:
         printf("sentencia leer\n");
         match(LEER);
-        t = prox_token();
         match(PARENTESIS_ABRE);
         ListaIdentificadores();
-        t = prox_token();
         match(PARENTESIS_CIERRA);
         break;
     case ESCRIBIR:
@@ -58,7 +54,6 @@ void Sentencia(){
         match(ESCRIBIR);
         match(PARENTESIS_ABRE);
         ListaExpresiones();
-        t = prox_token();
         match(PARENTESIS_CIERRA);
     break;
     default:
@@ -66,7 +61,6 @@ void Sentencia(){
         break;
     }
     }
-    t = prox_token();
     match(PUNTO_Y_COMA);
 }
 
@@ -118,7 +112,6 @@ void Primaria(){
         case PARENTESIS_ABRE:
             match(PARENTESIS_ABRE);
             Expresion();
-            t = prox_token();
             match(PARENTESIS_CIERRA);
         break;
         case OPERADOR_MENOS:
@@ -126,10 +119,10 @@ void Primaria(){
             Expresion();
     }
 }
-void Constante(){
+void Constante(){ //? Funciones evitables... pongo simplemente match(CONSTANTE)?
         match(CONSTANTE);
 }
 
-void Identificador(){
+void Identificador(){ //? Funciones evitables... pongo simplemente match(IDENTIFICADOR)?
         match(IDENTIFICADOR);
 }
