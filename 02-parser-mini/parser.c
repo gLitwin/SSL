@@ -18,44 +18,7 @@ void parser() {
     Programa();
 }
 
-/* void parseFile(const char *filename) { //! esto lo hizo chatgpt
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        perror("Error opening file");
-        return;
-    }
-
-    char line[MAX_LINE_LENGTH];
-    KeyValuePair kv;
-
-    while (fgets(line, sizeof(line), file)) {
-        // Eliminar el salto de línea al final de la línea
-        line[strcspn(line, "\n")] = 0;
-
-        // Separar clave y valor
-        char *equals_sign = strchr(line, '=');
-        if (equals_sign != NULL) {
-            *equals_sign = '\0'; // Terminar la clave aquí
-            strncpy(kv.key, line, MAX_KEY_LENGTH);
-            strncpy(kv.value, equals_sign + 1, MAX_VALUE_LENGTH);
-            printf("Key: '%s', Value: '%s'\n", kv.key, kv.value);
-        }
-    }
-
-    fclose(file);
-}
-
-int main(int argc, char *argv[]) {
-    if (argc != 2) {
-        fprintf(stderr, "Uso: %s <archivo_de_configuracion>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
-
-    parseFile(argv[1]);
-    return EXIT_SUCCESS;
-} */
-
-void Programa(){ //?      AXIOMA
+void Programa(){ //AXIOMA
     Token t = prox_token();
     if(t.tipo != PROGRAMA){
         ErrorSintactico();
@@ -75,9 +38,8 @@ void Programa(){ //?      AXIOMA
 }
 
 void ListaSentencias(){
-    //TODO debe haber al menos una sentencia
+    Sentencia();
     for(Token t = prox_token(); t.tipo != FIN; t = prox_token()){
-        //printToken(t); //!borrar
         Sentencia();
     }
 }
@@ -94,7 +56,7 @@ void Sentencia(){
         match(t);
         Expresion();
     } else {
-    switch (t.tipo) //TODO
+    switch (t.tipo)
     {
     case ENTERO:
         printf("sentencia declaracion\n");
@@ -137,7 +99,7 @@ void Sentencia(){
         break;
     }
     }
-    t = prox_token(); //TODO estaría bien dejar de repetir el ';', está hecho así por los printf
+    t = prox_token();
     if(t.tipo != PUNTO_Y_COMA){
         ErrorSintactico();
     }

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "scanner.h" // necesario ?
+#include "scanner.h"
 #include "parser.h"
 
 int main() {
