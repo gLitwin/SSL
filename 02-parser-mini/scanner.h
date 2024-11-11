@@ -34,6 +34,7 @@ typedef struct {
 
 void initTablaTransicion();
 int getColumn(int c);
+void ErrorSintactico();
 
 Token getNextToken();
 Token prox_token();

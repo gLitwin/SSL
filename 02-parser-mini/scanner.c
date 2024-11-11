@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include "scanner.h"
@@ -204,11 +205,26 @@ void printToken(Token token) {
         case ERROR_ASIGNACION_IGUAL:
             printf("Error en asignación por = solo '%s'\n", token.lexema);
             break;
+        case PROGRAMA:
+            printf("Palabra reservada: programa\n");
+            break;
+        case FIN:
+            printf("Palabra reservada: fin\n");
+            break;
+        case ENTERO:
+            printf("Palabra reservada: entero\n");
+            break;
+        case ESCRIBIR:
+            printf("Palabra reservada: escribir\n");
+            break;
+        case LEER:
+            printf("Palabra reservada: leer\n");
+            break;
     }
 }
 
 
-int *palabras_reservadas = {
+char *palabras_reservadas[] = {
     "programa", "entero", "fin", "escribir", "leer"
 };
 
@@ -233,7 +249,8 @@ Token prox_token(void)
 {
 	if (debo_escanear) {
 		token_actual = getNextToken();
-		while (is_error_token(token_actual)) {                
+		while (is_error_token(token_actual)) {
+            printToken(token_actual);          
 			token_actual = getNextToken();
 		}
 		debo_escanear = false;
@@ -252,9 +269,16 @@ bool son_tokens_iguales(Token token1, Token token2){
     return resultado;
 }
 
+void ErrorSintactico(){
+    Token t = prox_token();
+    printf("Error sintactico, no se esperaba el token: ");
+    printToken(t);
+    //exit(1);
+}
+
 void match(Token t)
 {
 	if (!son_tokens_iguales(t, prox_token()))
-		error_sintactico(prox_token());
+		ErrorSintactico(prox_token());
 	debo_escanear = true;
 }

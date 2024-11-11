@@ -55,19 +55,14 @@ int main(int argc, char *argv[]) {
     return EXIT_SUCCESS;
 } */
 
-void ErrorSintactico(){
-    Token t = prox_token();
-    printf("Error sintactico, no se esperaba el token: ");
-    printToken(t);
-}
-
 void Programa(){ //?      AXIOMA
     Token t = prox_token();
     if(t.tipo != PROGRAMA){
         ErrorSintactico();
     }
-    printf("Programa: ");
     match(t);
+    printf("Programa: ");
+    t = prox_token();
     Identificador();
     printf("%s\n", t.lexema);
     ListaSentencias();
@@ -82,6 +77,7 @@ void Programa(){ //?      AXIOMA
 void ListaSentencias(){
     //TODO debe haber al menos una sentencia
     for(Token t = prox_token(); t.tipo != FIN; t = prox_token()){
+        //printToken(t); //!borrar
         Sentencia();
     }
 }
@@ -89,6 +85,7 @@ void ListaSentencias(){
 void Sentencia(){
     Token t = prox_token();
     if(t.tipo == IDENTIFICADOR){
+        printf("sentencia asignacion\n");
         match(t);
         t = prox_token(t);
         if(t.tipo != ASIGNACION){
@@ -96,21 +93,16 @@ void Sentencia(){
         }
         match(t);
         Expresion();
-        printf("sentencia asignacion\n");
     } else {
     switch (t.tipo) //TODO
     {
     case ENTERO:
+        printf("sentencia declaracion\n");
         match(t);
         Identificador();
-        t = prox_token();
-        if(t.tipo != PUNTO_Y_COMA){
-            ErrorSintactico();
-        }
-        match(t);
-        printf("sentencia declaracion\n");
         break;
     case LEER:
+        printf("sentencia leer\n");
         match(t);
         t = prox_token();
         if(t.tipo != PARENTESIS_ABRE){
@@ -123,14 +115,9 @@ void Sentencia(){
             ErrorSintactico();
         }
         match(t);
-        t = prox_token();
-        if(t.tipo != PUNTO_Y_COMA){
-            ErrorSintactico();
-        }
-        match(t);
-        printf("sentencia leer\n");
         break;
     case ESCRIBIR:
+        printf("sentencia escribir\n");
         match(t);
         t = prox_token();
         if(t.tipo != PARENTESIS_ABRE){
@@ -143,39 +130,37 @@ void Sentencia(){
             ErrorSintactico();
         }
         match(t);
-        t = prox_token();
-        if(t.tipo != PUNTO_Y_COMA){
-            ErrorSintactico();
-        }
-        match(t);
-        printf("sentencia declaracion\n");
+    break;
     default:
+        //printf("Error default, se esperaba inicio de sentencia, ");
         ErrorSintactico();
         break;
     }
     }
-/*     t = prox_token(); //TODO estaría bien dejar de repetir el ';', está hecho así por los printf
+    t = prox_token(); //TODO estaría bien dejar de repetir el ';', está hecho así por los printf
     if(t.tipo != PUNTO_Y_COMA){
         ErrorSintactico();
     }
-    match(t); */
+    match(t);
 }
 
-void listaIdentificadores(){
+void ListaIdentificadores(){
     Identificador();
     Token t = prox_token();
     while(t.tipo == COMA){
         match(t);
         Identificador();
+        t = prox_token();
     }
 }
 
-void listaExpresiones(){
+void ListaExpresiones(){
     Expresion();
     Token t = prox_token();
     while(t.tipo == COMA){
         match(t);
         Expresion();
+        t = prox_token();
     }
 }
 
@@ -185,6 +170,7 @@ void Expresion(){
     while(t.tipo == OPERADOR_MAS || t.tipo == OPERADOR_MENOS){
         match(t);
         Termino();
+        t = prox_token();
     }
 }
 
@@ -194,6 +180,7 @@ void Termino(){
     while(t.tipo == OPERADOR_MULTIPLICACION || t.tipo == OPERADOR_DIVISION || t.tipo == OPERADOR_MODULO ){
         match(t);
         Primaria();
+        t = prox_token();
     }
 }
 
@@ -222,19 +209,15 @@ void Primaria(){
 }
 void Constante(){
     Token t = prox_token();
-    if(t.tipo == CONSTANTE){
+        if(t.tipo != CONSTANTE)
+        {ErrorSintactico();}
         match(t);
-    } else {
-        ErrorSintactico();
-    }
 }
 
 
 void Identificador(){
     Token t = prox_token();
-    if(t.tipo == IDENTIFICADOR){
+        if(t.tipo != IDENTIFICADOR)
+        {ErrorSintactico();}
         match(t);
-    } else {
-        ErrorSintactico();
-    }
 }
