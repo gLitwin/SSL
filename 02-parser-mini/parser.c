@@ -15,26 +15,19 @@ typedef struct {
 
 void parser() {
     initTablaTransicion();  // Inicializar la tabla de transición
-    Programa();
+    Programa(); //Comienza por el axioma a derivar
 }
 
 void Programa(){ //AXIOMA
     Token t = prox_token();
-    if(t.tipo != PROGRAMA){
-        ErrorSintactico();
-    }
-    match(t);
+    match(PROGRAMA);
     printf("Programa: ");
-    t = prox_token();
     Identificador();
     printf("%s\n", t.lexema);
     ListaSentencias();
     t = prox_token();
-    if(t.tipo != FIN){
-        ErrorSintactico();
-    }
     printf("fin\n");
-    match(t);
+    match(FIN);
 }
 
 void ListaSentencias(){
@@ -48,101 +41,77 @@ void Sentencia(){
     Token t = prox_token();
     if(t.tipo == IDENTIFICADOR){
         printf("sentencia asignacion\n");
-        match(t);
+        match(IDENTIFICADOR);
         t = prox_token(t);
-        if(t.tipo != ASIGNACION){
-            ErrorSintactico();
-        }
-        match(t);
+        match(ASIGNACION);
         Expresion();
     } else {
     switch (t.tipo)
     {
     case ENTERO:
         printf("sentencia declaracion\n");
-        match(t);
+        match(ENTERO);
         Identificador();
         break;
     case LEER:
         printf("sentencia leer\n");
-        match(t);
+        match(LEER);
         t = prox_token();
-        if(t.tipo != PARENTESIS_ABRE){
-            ErrorSintactico();
-        }
-        match(t);
+        match(PARENTESIS_ABRE);
         ListaIdentificadores();
         t = prox_token();
-        if(t.tipo != PARENTESIS_CIERRA){
-            ErrorSintactico();
-        }
-        match(t);
+        match(PARENTESIS_CIERRA);
         break;
     case ESCRIBIR:
         printf("sentencia escribir\n");
-        match(t);
-        t = prox_token();
-        if(t.tipo != PARENTESIS_ABRE){
-            ErrorSintactico();
-        }
-        match(t);
+        match(ESCRIBIR);
+        match(PARENTESIS_ABRE);
         ListaExpresiones();
         t = prox_token();
-        if(t.tipo != PARENTESIS_CIERRA){
-            ErrorSintactico();
-        }
-        match(t);
+        match(PARENTESIS_CIERRA);
     break;
     default:
-        //printf("Error default, se esperaba inicio de sentencia, ");
         ErrorSintactico();
         break;
     }
     }
     t = prox_token();
-    if(t.tipo != PUNTO_Y_COMA){
-        ErrorSintactico();
-    }
-    match(t);
+    match(PUNTO_Y_COMA);
 }
 
 void ListaIdentificadores(){
     Identificador();
     Token t = prox_token();
-    while(t.tipo == COMA){
-        match(t);
+    for(;t.tipo == COMA;t=prox_token()){
+        match(COMA);
         Identificador();
-        t = prox_token();
     }
 }
 
 void ListaExpresiones(){
     Expresion();
     Token t = prox_token();
-    while(t.tipo == COMA){
-        match(t);
+    for(;t.tipo == COMA;t=prox_token()){
+        match(COMA);
         Expresion();
-        t = prox_token();
     }
 }
 
 void Expresion(){
     Termino();
     Token t = prox_token();
-    while(t.tipo == OPERADOR_MAS || t.tipo == OPERADOR_MENOS){
-        match(t);
+    for(;t.tipo == OPERADOR_MAS || t.tipo == OPERADOR_MENOS;t=prox_token()){
+        match(t.tipo);
         Termino();
-        t = prox_token();
     }
 }
 
 void Termino(){
     Primaria();
     Token t = prox_token();
-    while(t.tipo == OPERADOR_MULTIPLICACION || t.tipo == OPERADOR_DIVISION || t.tipo == OPERADOR_MODULO ){
-        match(t);
+    for(;t.tipo == OPERADOR_MULTIPLICACION || t.tipo == OPERADOR_DIVISION || t.tipo == OPERADOR_MODULO;t=prox_token()){
+        match(t.tipo);
         Primaria();
-        t = prox_token();
     }
 }
 
@@ -156,30 +125,20 @@ void Primaria(){
             Constante();
         break;
         case PARENTESIS_ABRE:
-            match(t);
+            match(PARENTESIS_ABRE);
             Expresion();
             t = prox_token();
-            if(t.tipo != PARENTESIS_CIERRA){
-                ErrorSintactico();
-            }
-            match(t);
+            match(PARENTESIS_CIERRA);
         break;
         case OPERADOR_MENOS:
-            match(t);
+            match(OPERADOR_MENOS);
             Expresion();
     }
 }
 void Constante(){
-    Token t = prox_token();
-        if(t.tipo != CONSTANTE)
-        {ErrorSintactico();}
-        match(t);
+        match(CONSTANTE);
 }
 
-
 void Identificador(){
-    Token t = prox_token();
-        if(t.tipo != IDENTIFICADOR)
-        {ErrorSintactico();}
-        match(t);
+        match(IDENTIFICADOR);
 }

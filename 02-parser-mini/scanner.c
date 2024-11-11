@@ -276,9 +276,9 @@ void ErrorSintactico(){
     //exit(1);
 }
 
-void match(Token t)
+void match(TokenType t)
 {
-	if (!son_tokens_iguales(t, prox_token()))
+	if (t != prox_token().tipo)
 		ErrorSintactico(prox_token());
 	debo_escanear = true;
 }

@@ -38,7 +38,7 @@ void ErrorSintactico();
 
 Token getNextToken();
 Token prox_token();
-void match(Token t);
+void match(TokenType t);
 void printToken(Token token);
 
 int is_alpha(int c);
