@@ -8,7 +8,6 @@
 /* Codigo que va al header de scanner.c y scanner.h */
 %{
 #include "parser.h"
-#include "helpers.h"
 extern int erroresLexicos;
 %}
 

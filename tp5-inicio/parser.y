@@ -1,10 +1,9 @@
 %{
 #include <stdio.h>
 #include "scanner.h"
-#include "helpers.h"
 
-extern int erroresLexicos;
-extern int errores;
+int erroresLexicos;
+int nroErrores;
 
 extern char *yytext;
 extern int yyleng;
