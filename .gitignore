@@ -6,3 +6,4 @@ tp5-inicio/*.c
 tp5-inicio/*.h
 tp5-inicio/*.txt
 *.exe
+.vscode/*
