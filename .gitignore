@@ -1,3 +1,8 @@
 02-parser-mini/*.txt
 02-parser-mini/*.o
 02-parser-mini/*.exe
+04-parser-flex-bison/*
+tp5-inicio/*.c
+tp5-inicio/*.h
+tp5-inicio/*.txt
+*.exe
