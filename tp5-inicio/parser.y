@@ -39,6 +39,10 @@ char *token_names[] = {
 
 %type <str> IDENTIFICADOR
 
+%left OPERADOR_SUMA OPERADOR_RESTA
+%left OPERADOR_PRODUCTO OPERADOR_DIVISION OPERADOR_MODULO
+%precedence NEGACION
+
 %%
 program:
       PROGRAMA IDENTIFICADOR { 
@@ -86,7 +90,7 @@ primaria:
       IDENTIFICADOR
     | CONSTANTE
     | PARENTESIS_ABRE {printf("abre parentesis\n");} expresion PARENTESIS_CIERRA {printf("cierra parentesis\n");}
-    | OPERADOR_RESTA expresion {printf("Inversión\n");}
+    | OPERADOR_RESTA expresion {printf("inversion\n");} %prec NEGACION
     ;
 
 %%
