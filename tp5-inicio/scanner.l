@@ -22,14 +22,24 @@ COMENTARIO      "//".*
 /* Reglas */
 %%
 
-"programa"        return PROGRAMA;
+"programa"        {
+    return PROGRAMA;
+}
+
 "fin"             return FIN;
 "entero"          return ENTERO;
 "leer"            return LEER;
 "escribir"        return ESCRIBIR;
 
-{IDENTIFICADOR} return IDENTIFICADOR;
-{CONSTANTE}     return CONSTANTE;
+{IDENTIFICADOR} {
+    yylval.str = strdup(yytext);
+    return IDENTIFICADOR;
+}
+
+{CONSTANTE}     {
+    yylval.num = atoi(yytext);
+    return CONSTANTE;
+}
 
 ":="            return ASIGNACION;
 

@@ -41,9 +41,11 @@ char *token_names[] = {
 
 %%
 program:
-      {printf("programa:");} PROGRAMA IDENTIFICADOR {printf("%s \n", $<str>2);} listaSentencias FIN
+      PROGRAMA IDENTIFICADOR { 
+          printf("programa: %s\n", $<str>2); 
+          free($<str>2);  // Liberar memoria después de usar el identificador
+      } listaSentencias FIN
     ;
-
 
 listaSentencias:
       sentencia
@@ -51,10 +53,10 @@ listaSentencias:
     ;
 
 sentencia:
-      {printf("Sentencia Declaracion\n");} ENTERO IDENTIFICADOR {printf("%s \n", $<str>2);} PUNTO_Y_COMA
-    | {printf("Sentencia Asignacion\n");} IDENTIFICADOR ASIGNACION expresion PUNTO_Y_COMA
-    | {printf("Sentencia Leer\n");} LEER PARENTESIS_ABRE listaIdentificadores PARENTESIS_CIERRA PUNTO_Y_COMA
-    | {printf("Sentencia Escribir\n");} ESCRIBIR PARENTESIS_ABRE listaExpresiones PARENTESIS_CIERRA PUNTO_Y_COMA
+      ENTERO IDENTIFICADOR PUNTO_Y_COMA {printf("Sentencia declaración: %s \n", $<str>2);free($<str>2);}
+    | IDENTIFICADOR ASIGNACION expresion PUNTO_Y_COMA {printf("Sentencia Asignacion\n");} 
+    | LEER PARENTESIS_ABRE listaIdentificadores PARENTESIS_CIERRA PUNTO_Y_COMA {printf("Sentencia Leer\n");} 
+    | ESCRIBIR PARENTESIS_ABRE listaExpresiones PARENTESIS_CIERRA PUNTO_Y_COMA {printf("Sentencia Escribir\n");}
     ;
 
 listaIdentificadores:
@@ -75,7 +77,7 @@ expresion:
 
 termino:
       primaria
-    | termino OPERADOR_PRODUCTO {printf("producto\n");}primaria
+    | termino OPERADOR_PRODUCTO {printf("producto\n");} primaria
     | termino OPERADOR_DIVISION {printf("dicision\n");} primaria
     | termino OPERADOR_MODULO {printf("modulo\n");} primaria
     ;
@@ -84,7 +86,7 @@ primaria:
       IDENTIFICADOR
     | CONSTANTE
     | PARENTESIS_ABRE {printf("abre parentesis\n");} expresion PARENTESIS_CIERRA {printf("cierra parentesis\n");}
-    | OPERADOR_RESTA expresion
+    | OPERADOR_RESTA expresion {printf("Inversión\n");}
     ;
 
 %%
