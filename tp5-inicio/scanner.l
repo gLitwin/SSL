@@ -57,7 +57,7 @@ COMENTARIO      "//".*
 {ESPACIO}       ; 
 {COMENTARIO}    ; 
 
-{DIGITO}+{IDENTIFICADOR}  {puts("34"); erroresLexicos++; return ERROR_CONSTANTE_INVALIDA;}  
-{IDENTIFICADOR}[^a-zA-Z0-9\t\n\r \(\)\+\-\*\/\%\,\;:]+ {puts("34");erroresLexicos++; return ERROR_IDENTIFICADOR_INVALIDO;}
-.               {puts("34");erroresLexicos++; return ERROR_CADENA_INVALIDA;}
+{DIGITO}+{IDENTIFICADOR}  {erroresLexicos++; return ERROR_CONSTANTE_INVALIDA;}  
+{IDENTIFICADOR}[^a-zA-Z0-9\t\n\r \(\)\+\-\*\/\%\,\;:]+ {erroresLexicos++; return ERROR_IDENTIFICADOR_INVALIDO;}
+.               {erroresLexicos++; return ERROR_CADENA_INVALIDA;}
 %%
