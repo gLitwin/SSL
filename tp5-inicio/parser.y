@@ -1,11 +1,16 @@
 %{
 #include <stdio.h>
 #include "scanner.h"
+#include <string.h>
+#include <stdbool.h>
 
 int erroresLexicos;
 int nroErrores;
+int eserrorlexico;
+char* msgErrorLexico;
 
 extern char *yytext;
+extern int yylineno;
 extern int yyleng;
 extern int yylex(void);
 extern void yyerror(char*);
@@ -41,10 +46,7 @@ char *token_names[] = {
 
 %left OPERADOR_SUMA OPERADOR_RESTA
 %left OPERADOR_PRODUCTO OPERADOR_DIVISION OPERADOR_MODULO
-%right ASIGNACION
-%nonassoc PARENTESIS_ABRE PARENTESIS_CIERRA
-%precedence OPERADOR_RESTA_UNARIO
-
+%precedence NEGACION
 
 %%
 program:
@@ -60,11 +62,26 @@ listaSentencias:
     ;
 
 sentencia:
-      ENTERO IDENTIFICADOR PUNTO_Y_COMA {printf("Sentencia declaración: %s \n", $<str>2);free($<str>2);}
+      ENTERO IDENTIFICADOR PUNTO_Y_COMA {printf("Sentencia declaracion: %s \n", $<str>2);free($<str>2);}
     | IDENTIFICADOR ASIGNACION expresion PUNTO_Y_COMA {printf("Sentencia Asignacion\n");} 
     | LEER PARENTESIS_ABRE listaIdentificadores PARENTESIS_CIERRA PUNTO_Y_COMA {printf("Sentencia Leer\n");} 
     | ESCRIBIR PARENTESIS_ABRE listaExpresiones PARENTESIS_CIERRA PUNTO_Y_COMA {printf("Sentencia Escribir\n");}
+    | error otrosTokens PUNTO_Y_COMA;
     ;
+
+  otrosTokens:
+    /* Vacío */ 
+    | otrosTokens IDENTIFICADOR
+    | otrosTokens CONSTANTE
+    | otrosTokens ASIGNACION
+    | otrosTokens OPERADOR_SUMA
+    | otrosTokens OPERADOR_RESTA
+    | otrosTokens OPERADOR_PRODUCTO
+    | otrosTokens OPERADOR_DIVISION
+    | otrosTokens OPERADOR_MODULO
+    | otrosTokens PARENTESIS_ABRE
+    | otrosTokens PARENTESIS_CIERRA
+    | otrosTokens COMA
 
 listaIdentificadores:
       IDENTIFICADOR
@@ -113,12 +130,30 @@ int main() {
 		puts("Memoria insuficiente\n"); status = 2;
   break;
 	}
-  printf("Errors sintácticos: %d - Errores léxicos: %d\n", nroErrores - erroresLexicos, erroresLexicos);
+  printf("Errores sintacticos: %d - Errores léxicos: %d\n", nroErrores - erroresLexicos, erroresLexicos);
 	return status;
 }
 /* Informa la ocurrencia de un error. */
-void yyerror(char *s){
+/*void yyerror(char *s){
     printf("%s\n",s);
     nroErrores++;
 	return;
+}*/
+
+void yyerror(char *s) {
+  nroErrores++;
+  printf("e-");
+  if(eserrorlexico){
+    printf("Linea %d: Error lexico: %s %s\n", yylineno, msgErrorLexico, yytext);
+    erroresLexicos++;
+    eserrorlexico = 0;
+  } else {
+    if (yychar != YYEMPTY) {
+      printf("Linea %d: %s, token inesperado '%s': ", yylineno, s, yytext);
+      printf("\n");
+    } else {
+            printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        }
+  }
+ 
 }

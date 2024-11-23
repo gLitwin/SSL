@@ -8,7 +8,8 @@
 /* Codigo que va al header de scanner.c y scanner.h */
 %{
 #include "parser.h"
-extern int erroresLexicos;
+extern int eserrorlexico;
+extern char* msgErrorLexico;
 %}
 
 /* Definiciones regulares */
@@ -57,7 +58,9 @@ COMENTARIO      "//".*
 {ESPACIO}       ; 
 {COMENTARIO}    ; 
 
-{DIGITO}+{IDENTIFICADOR}  {puts("34"); erroresLexicos++; return ERROR_CONSTANTE_INVALIDA;}  
-{IDENTIFICADOR}[^a-zA-Z0-9\t\n\r \(\)\+\-\*\/\%\,\;:]+ {puts("34");erroresLexicos++; return ERROR_IDENTIFICADOR_INVALIDO;}
-.               {puts("34");erroresLexicos++; return ERROR_CADENA_INVALIDA;}
+{DIGITO}+{IDENTIFICADOR}  {eserrorlexico = 1; msgErrorLexico = "constante invalida"; return ERROR_CONSTANTE_INVALIDA;}  
+{IDENTIFICADOR}[^a-zA-Z0-9\t\n\r \(\)\+\-\*\/\%\,\;:]+ {eserrorlexico = 1; msgErrorLexico = "identificador malformado"; return ERROR_IDENTIFICADOR_INVALIDO;}
+"="             {eserrorlexico = 1; msgErrorLexico = "asignacion malformada"; return ERROR_CADENA_INVALIDA;}
+":"             {eserrorlexico = 1; msgErrorLexico = "asignacion malformada"; return ERROR_CADENA_INVALIDA;}
+.               {eserrorlexico = 1; msgErrorLexico = "cadena invalida"; return ERROR_CADENA_INVALIDA;}
 %%
