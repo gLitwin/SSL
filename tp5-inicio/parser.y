@@ -39,6 +39,13 @@ char *token_names[] = {
 
 %type <str> IDENTIFICADOR
 
+%left OPERADOR_SUMA OPERADOR_RESTA
+%left OPERADOR_PRODUCTO OPERADOR_DIVISION OPERADOR_MODULO
+%right ASIGNACION
+%nonassoc PARENTESIS_ABRE PARENTESIS_CIERRA
+%precedence OPERADOR_RESTA_UNARIO
+
+
 %%
 program:
       PROGRAMA IDENTIFICADOR { 
@@ -71,23 +78,24 @@ listaExpresiones:
 
 expresion:
       termino
-    | expresion OPERADOR_SUMA {printf("suma\n");} termino
-    | expresion OPERADOR_RESTA {printf("resta\n");} termino
+    | expresion OPERADOR_SUMA termino { printf("suma\n"); }
+    | expresion OPERADOR_RESTA termino { printf("resta\n"); }
     ;
 
 termino:
       primaria
-    | termino OPERADOR_PRODUCTO {printf("producto\n");} primaria
-    | termino OPERADOR_DIVISION {printf("dicision\n");} primaria
-    | termino OPERADOR_MODULO {printf("modulo\n");} primaria
+    | termino OPERADOR_PRODUCTO primaria { printf("multiplicación\n"); }
+    | termino OPERADOR_DIVISION primaria { printf("división\n"); }
+    | termino OPERADOR_MODULO primaria { printf("módulo\n"); }
     ;
 
 primaria:
       IDENTIFICADOR
     | CONSTANTE
-    | PARENTESIS_ABRE {printf("abre parentesis\n");} expresion PARENTESIS_CIERRA {printf("cierra parentesis\n");}
-    | OPERADOR_RESTA expresion {printf("Inversión\n");}
+    | PARENTESIS_ABRE { printf("abre parentesis\n"); } expresion { printf("cierra parentesis\n"); } PARENTESIS_CIERRA
+    | OPERADOR_RESTA primaria { printf("inversión\n"); }
     ;
+
 
 %%
 
